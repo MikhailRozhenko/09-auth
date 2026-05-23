@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import Errorbox from '@/components/Errorbox/Errorbox';
 import Loader from '@/components/Loader/Loader';
 import Modal from '@/components/Modal/Modal';
-import { fetchNoteById } from '@/lib/api';
+import { fetchNoteById } from '@/lib/api/clientApi';
 
 type Props = {
   id: string;
