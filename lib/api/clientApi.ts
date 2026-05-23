@@ -1,5 +1,6 @@
 import { Note } from '@/types/note';
 import { User } from '@/types/user';
+
 import { nextServer } from './api';
 
 export interface CreateNotePayload {
@@ -12,6 +13,8 @@ interface NotesResponse {
   notes: Note[];
   totalPages: number;
 }
+
+/* AUTH */
 
 export type RegisterRequest = {
   email: string;
@@ -33,6 +36,10 @@ export const login = async (data: LoginRequest) => {
   return res.data;
 };
 
+export const logout = async () => {
+  await nextServer.post('/auth/logout');
+};
+
 export const checkSession = async () => {
   const res = await nextServer.get('/auth/session');
   return res.data;
@@ -41,10 +48,6 @@ export const checkSession = async () => {
 export const getMe = async () => {
   const res = await nextServer.get<User>('/users/me');
   return res.data;
-};
-
-export const logout = async () => {
-  await nextServer.post('/auth/logout');
 };
 
 export type UpdateUserRequest = {
@@ -56,26 +59,32 @@ export const updateMe = async (payload: UpdateUserRequest) => {
   return res.data;
 };
 
+/* NOTES */
+
 export const fetchNotes = async (
   page: number,
   search: string,
   tag?: string,
 ): Promise<NotesResponse> => {
-  const response = await nextServer.get<NotesResponse>('/notes', {
-    params: { page, search, tag },
+  const res = await nextServer.get<NotesResponse>('/notes', {
+    params: {
+      page,
+      search,
+      tag,
+    },
   });
 
-  return response.data;
+  return res.data;
 };
 
-export const createNote = async (newTask: CreateNotePayload) => {
-  const response = await nextServer.post<Note>('/notes', newTask);
-  return response.data;
+export const createNote = async (newNote: CreateNotePayload) => {
+  const res = await nextServer.post<Note>('/notes', newNote);
+  return res.data;
 };
 
 export const deleteNote = async (id: string) => {
-  const response = await nextServer.delete<Note>(`/notes/${id}`);
-  return response.data;
+  const res = await nextServer.delete<Note>(`/notes/${id}`);
+  return res.data;
 };
 
 export const fetchNoteById = async (id: string) => {
