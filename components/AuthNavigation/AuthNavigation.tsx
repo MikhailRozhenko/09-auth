@@ -11,6 +11,9 @@ export default function AuthNavigation() {
   const router = useRouter();
 
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+
+  const user = useAuthStore((state) => state.user);
+
   const clearIsAuthenticated = useAuthStore(
     (state) => state.clearIsAuthenticated,
   );
@@ -31,6 +34,10 @@ export default function AuthNavigation() {
             <Link href="/profile" className={css.navigationLink}>
               Profile
             </Link>
+          </li>
+
+          <li className={css.navigationItem}>
+            <p className={css.userEmail}>{user?.email ?? user?.username}</p>
           </li>
 
           <li className={css.navigationItem}>

@@ -3,15 +3,15 @@ import { User } from '@/types/user';
 
 import { nextServer } from './api';
 
+interface NotesResponse {
+  notes: Note[];
+  totalPages: number;
+}
+
 export interface CreateNotePayload {
   title: string;
   content: string;
   tag: string;
-}
-
-interface NotesResponse {
-  notes: Note[];
-  totalPages: number;
 }
 
 /* AUTH */
@@ -61,6 +61,16 @@ export const updateMe = async (payload: UpdateUserRequest) => {
 
 /* NOTES */
 
+export const createNote = async (newNote: CreateNotePayload) => {
+  const res = await nextServer.post<Note>('/notes', newNote);
+  return res.data;
+};
+
+export const deleteNote = async (id: string) => {
+  const res = await nextServer.delete<Note>(`/notes/${id}`);
+  return res.data;
+};
+
 export const fetchNotes = async (
   page: number,
   search: string,
@@ -74,16 +84,6 @@ export const fetchNotes = async (
     },
   });
 
-  return res.data;
-};
-
-export const createNote = async (newNote: CreateNotePayload) => {
-  const res = await nextServer.post<Note>('/notes', newNote);
-  return res.data;
-};
-
-export const deleteNote = async (id: string) => {
-  const res = await nextServer.delete<Note>(`/notes/${id}`);
   return res.data;
 };
 
