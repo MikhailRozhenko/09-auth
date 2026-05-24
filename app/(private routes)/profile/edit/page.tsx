@@ -2,6 +2,7 @@
 
 import { getMe, updateMe } from '@/lib/api/clientApi';
 import { useAuthStore } from '@/lib/store/authStore';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -13,11 +14,13 @@ export default function EditProfilePage() {
 
   const [userName, setUserName] = useState('');
   const [email, setEmail] = useState('');
+  const [avatar, setAvatar] = useState('');
 
   useEffect(() => {
     getMe().then((user) => {
       setUserName(user.username ?? '');
       setEmail(user.email ?? '');
+      setAvatar(user.avatar ?? '');
     });
   }, []);
 
@@ -33,6 +36,7 @@ export default function EditProfilePage() {
     });
 
     setUser(updatedUser);
+
     router.push('/profile');
   };
 
@@ -40,6 +44,16 @@ export default function EditProfilePage() {
     <main className={css.mainContent}>
       <div className={css.profileCard}>
         <h1 className={css.formTitle}>Edit Profile</h1>
+
+        <div className={css.avatarWrapper}>
+          <Image
+            src={avatar || '/default-avatar.png'}
+            alt="User Avatar"
+            width={120}
+            height={120}
+            className={css.avatar}
+          />
+        </div>
 
         <form onSubmit={handleSaveUser} className={css.profileInfo}>
           <div className={css.usernameWrapper}>

@@ -67,7 +67,14 @@ export const fetchNotes = async (
   return res.data;
 };
 
-export const fetchNoteById = async (id: string) => {
-  const res = await nextServer.get<Note>(`/notes/${id}`);
+export const fetchNoteById = async (id: string): Promise<Note> => {
+  const cookieStore = await cookies();
+
+  const res = await nextServer.get<Note>(`/notes/${id}`, {
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+  });
+
   return res.data;
 };
